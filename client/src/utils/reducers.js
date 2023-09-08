@@ -16,9 +16,10 @@ const initialState = {
   cart: [],
   cartOpen: false,
   categories: [],
-  currentCategory: '',
+  currentCategory: "",
 };
 
+// export the reducer function
 export const reducer = (state = initialState, action) => {
   switch (action.type) {
     case UPDATE_PRODUCTS:
@@ -46,7 +47,7 @@ export const reducer = (state = initialState, action) => {
         cartOpen: true,
         cart: state.cart.map((product) => {
           if (action._id === product._id) {
-            product.purchaseQuantity = action.purchaseQuantity;
+            return { ...product, purchaseQuantity: action.purchaseQuantity };
           }
           return product;
         }),

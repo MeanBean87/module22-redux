@@ -1,16 +1,17 @@
-import { useEffect } from 'react';
-import ProductItem from '../ProductItem';
-import { UPDATE_PRODUCTS } from '../../utils/actions';
-import { useQuery } from '@apollo/client';
-import { QUERY_PRODUCTS } from '../../utils/queries';
-import { idbPromise } from '../../utils/helpers';
-import spinner from '../../assets/spinner.gif';
+import { useEffect } from "react";
+import ProductItem from "../ProductItem";
+import { UPDATE_PRODUCTS } from "../../utils/actions";
+import { useQuery } from "@apollo/client";
+import { QUERY_PRODUCTS } from "../../utils/queries";
+import { idbPromise } from "../../utils/helpers";
+import { useDispatch, useSelector } from "react-redux";
+import spinner from "../../assets/spinner.gif";
 
 function ProductList() {
   const dispatch = useDispatch();
-  const state = useSelector((state) => state);
-
-  const { currentCategory } = state;
+  // Define the state variables for products and currentCategory using the useSelector() Hook
+  const currentCategory = useSelector((state) => state.currentCategory);
+  const products = useSelector((state) => state.products);
 
   const { loading, data } = useQuery(QUERY_PRODUCTS);
 
@@ -21,10 +22,10 @@ function ProductList() {
         products: data.products,
       });
       data.products.forEach((product) => {
-        idbPromise('products', 'put', product);
+        idbPromise("products", "put", product);
       });
     } else if (!loading) {
-      idbPromise('products', 'get').then((products) => {
+      idbPromise("products", "get").then((products) => {
         dispatch({
           type: UPDATE_PRODUCTS,
           products: products,
@@ -35,10 +36,10 @@ function ProductList() {
 
   function filterProducts() {
     if (!currentCategory) {
-      return state.products;
+      return products;
     }
 
-    return state.products.filter(
+    return products.filter(
       (product) => product.category._id === currentCategory
     );
   }
@@ -46,7 +47,7 @@ function ProductList() {
   return (
     <div className="my-2">
       <h2>Our Products:</h2>
-      {state.products.length ? (
+      {products.length ? (
         <div className="flex-row">
           {filterProducts().map((product) => (
             <ProductItem

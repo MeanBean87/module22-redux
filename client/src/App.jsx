@@ -6,12 +6,13 @@ import {
   createHttpLink,
 } from "@apollo/client";
 import { setContext } from "@apollo/client/link/context";
-// Imports for Redux
+// Importing Provider from react-redux
 import { Provider } from "react-redux";
+// Importing store from utils
 import store from "./utils/store";
 
 import Nav from "./components/Nav";
-// import { StoreProvider } from './utils/GlobalState';
+
 
 const httpLink = createHttpLink({
   uri: "/graphql",
